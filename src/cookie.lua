@@ -1,6 +1,5 @@
 -- package cookie: naive cookie parsing
 -- basic functionality from https://github.com/frodsan/cookie.lua/blob/master/cookie.lua
--- frodson/cookie can't be found in luarocks
 local cookie = {}
 
 local gmatch = string.gmatch
@@ -25,6 +24,5 @@ function cookie.parse(cookie_string)
 
 	return res
 end
-
 
 return cookie
