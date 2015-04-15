@@ -13,7 +13,29 @@ the following:
 busted spec
 ```
 
+## Developing with Nginx Locally
+
+The `scripts/` director contains helpers for stopping and starting nginx. The
+nginx config file in `nginx/conf/nginx.conf` should be enough to test.
+
+To start:
+
+```
+./scripts/nginx-start
+```
+
+Hack, hack, hack...
+
+```
+./scripts/nginx-reload
+```
+
 ## Dependencies
 
-The development dependencies:
 	* [busted](http://olivinelabs.com/busted/)
+	* [lua-httpclient](https://github.com/lusis/lua-httpclient). Can be installed with `luarocks`
+
+## Environement variables
+
+	* `NGINX_BIN`: Set to the location of your nginx binary.
+	* `HELIOS_URL`: The URL to Helios (e.g. http://helios.site.com)
