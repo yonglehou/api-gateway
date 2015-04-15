@@ -43,7 +43,11 @@ local function helios_health_check_ok(code, body)
 end
 
 function helios:healthcheck()
-	local res = self.net:get(self:healthcheck_url())
+	local status, res = pcall(function() return self.net:get(self:healthcheck_url()) end)
+	if not status then
+    return false, "Error connecting to Helios: " .. res
+	end
+
 	if res and helios_health_check_ok(res.code, res.body) then
 		return true, nil
 	else
