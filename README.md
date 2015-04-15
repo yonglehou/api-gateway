@@ -13,6 +13,11 @@ the following:
 busted spec
 ```
 
+## Resources
+
+ * `/healthcheck`: Returns 200 status code on success. Checks to see that the
+	 helios heartbeat responds as expected.
+
 ## Developing with Nginx Locally
 
 The `scripts/` director contains helpers for stopping and starting nginx. The
