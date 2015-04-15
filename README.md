@@ -32,10 +32,10 @@ Hack, hack, hack...
 
 ## Dependencies
 
-	* [busted](http://olivinelabs.com/busted/)
-	* [lua-httpclient](https://github.com/lusis/lua-httpclient). Can be installed with `luarocks`
+ * [busted](http://olivinelabs.com/busted/)
+ * [lua-httpclient](https://github.com/lusis/lua-httpclient). Can be installed with `luarocks`
 
 ## Environement variables
 
-	* `NGINX_BIN`: Set to the location of your nginx binary.
-	* `HELIOS_URL`: The URL to Helios (e.g. http://helios.site.com)
+ * `NGINX_BIN`: Set to the location of your nginx binary.
+ * `HELIOS_URL`: The URL to Helios (e.g. http://helios.site.com)
