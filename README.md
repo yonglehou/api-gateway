@@ -24,7 +24,11 @@ To start:
 ./scripts/nginx-start
 ```
 
-Hack, hack, hack...
+You can test the basic functionality with:
+
+```
+curl -H “Cookie: session_token=<token>” http://127.0.0.1:8089/luatest
+```
 
 ```
 ./scripts/nginx-reload
