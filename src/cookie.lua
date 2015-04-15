@@ -9,6 +9,10 @@ local find   = string.find
 function cookie.parse(cookie_string)
 	local res = {}
 
+	if not cookie_string then
+		return res
+	end
+
 	for pair in gmatch(cookie_string, "[^; ]+") do
 		local eq = find(pair, "=")
 

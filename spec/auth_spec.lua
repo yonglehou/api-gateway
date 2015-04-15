@@ -1,4 +1,3 @@
-local net = require "httpclient"
 local auth = require "auth"
 local helios = require "mocks.gateway.helios"
 
@@ -12,7 +11,7 @@ describe("authentication tests", function()
 		end)
 
 		it("tests that we get a userid back", function()
-			local helios = helios:new({user_id = expected_user_id})
+			local helios = helios:new(expected_user_id)
 			spy.on(helios, "validate_token")
 
 			local auth_client = auth:new(helios)
@@ -23,7 +22,7 @@ describe("authentication tests", function()
 		end)
 
 		it("test that we get null when validate_token fails with an empty map", function()
-			local helios = helios:new({})
+			local helios = helios:new(nil)
 			spy.on(helios, "validate_token")
 
 			local auth_client = auth:new(helios)

@@ -15,9 +15,9 @@ end
 -- @return user id
 --
 function auth:authenticate_and_return_user_id(session_token)
-	local res = self.helios:validate_token(session_token)
-	if res and res.user_id then
-		return res.user_id
+	local user_id = self.helios:validate_token(session_token)
+	if user_id then
+		return user_id
 	end
 
 	return nil

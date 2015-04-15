@@ -6,6 +6,12 @@ describe("cookie parsing", function()
 		assert.are.same(parsed_cookie, cookie.parse(cookie_string))
 	end)
 
+	it("tests a nil value to parse", function()
+		local cookie_string = nil
+		assert.are.same({}, cookie.parse(cookie_string))
+		
+	end)
+
 	describe("compound cookie parsing", function()
 		before_each(function()
 			cookie_string = "session_token=1234; other_value=abced\""
