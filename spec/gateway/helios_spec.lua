@@ -32,5 +32,27 @@ describe("validate_token tests", function()
 		
 	end)
 
+	describe("health check", function()
+		
+		before_each(function()
+			net = net:new({body = "Service status: OK", code = 200})
+			spy.on(net, "get")
+			helios = helios:new(net, "http://helios")
+		end)
+
+		it("returns true when helios is up", function()
+			local status, err = helios:healthcheck();
+			assert.are.equal(true, status)
+			assert.are.equal(nil, err)
+		end)
+
+		it ("returns false when helios fails", function()
+			net:set_get_response({code = 500, err = "gateway time out"})
+			local status, err = helios:healthcheck();
+			assert.are.equal(false, status)
+			assert.are.equal("gateway time out", err)
+		end)
+	end)
+
 end)
 

@@ -11,8 +11,24 @@ function nginx.init(helios_url)
 	local helios = helios:new(client, helios_url)
 	local auth = auth:new(helios)
 
-	return auth
+	return {
+		auth = auth,
+		helios = helios,
+		client = client
+	}
 end
+
+function nginx.healthcheck(app)
+	local is_up, res = app.helios:healthcheck()
+	if is_up then
+		ngx.say("Service status: OK")
+	else
+		ngx.say("Error connecting to helios: " .. res)
+		ngx.exit(500)
+	end
+end
+
+
 
 function nginx.authenticate(auth, cookie_string)
 	local cookie_map = cookie.parse(cookie_string)

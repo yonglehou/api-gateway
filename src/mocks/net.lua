@@ -14,4 +14,8 @@ function net:get(uri)
 	return self.get_response
 end
 
+function net:set_get_response(response)
+	self.get_response = response
+end
+
 return net

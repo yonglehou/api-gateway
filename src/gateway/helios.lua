@@ -34,8 +34,30 @@ function helios:validate_token(session_token)
 	end
 end
 
+local function helios_health_check_ok(code, body)
+	if code == 200 and string.find(body, "OK") then
+		return true
+	end
+
+	return false
+end
+
+function helios:healthcheck()
+	local res = self.net:get(self:healthcheck_url())
+	if res and helios_health_check_ok(res.code, res.body) then
+		return true, nil
+	else
+		return false, res.err
+	end
+end
+
+
 function helios:request_url(session_token)
 	return string.format("%s/info?code=%s", self.helios_url, session_token)
+end
+
+function helios:healthcheck_url()
+	return string.format("%s/heartbeat", self.helios_url)
 end
 
 return helios

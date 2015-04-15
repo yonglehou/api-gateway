@@ -1,0 +1,7 @@
+#!/bin/bash
+# How to use this:
+# 1. Add key "config/api-gateway/*" with the upstream host to
+#		your consul key value store.
+# 2. Run this with ./scripts/templatize your-consul-host:8500
+WORKING=$(dirname $0)/..
+consul-template -consul $1 -template "$WORKING/templates/src/config.lua:$WORKING/src/config.lua" -once
