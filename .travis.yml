@@ -2,6 +2,7 @@ language: lua
 install:
   - sudo apt-get install luajit
   - sudo apt-get install luarocks
+  - sudo luarocks install luasec
   - sudo luarocks install busted
   - sudo luarocks install lua-cjson
   - sudo luarocks install httpclient
