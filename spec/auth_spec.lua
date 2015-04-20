@@ -2,7 +2,7 @@ local auth = require "auth"
 local helios = require "mocks.gateway.helios"
 
 describe("authentication tests", function()
-  describe("successful authentication", function()
+  describe("authenticate_and_return_user_id", function()
     before_each(function()
       session_token = "abcdef"
       expected_user_id = 1234
@@ -41,4 +41,35 @@ describe("authentication tests", function()
       assert.spy(helios.validate_token).was.called()
     end)
   end)
+
+	describe("authenticate", function()
+
+		it("returns nil when given a nil cookie", function()
+			local auth_client = auth:new({})
+			assert.are.equal(nil, auth_client:authenticate(nil))
+		end)
+
+		it("returns nil when given an empty cookie", function()
+			local auth_client = auth:new({})
+			assert.are.equal(nil, auth_client:authenticate(""))
+			
+		end)
+
+		it("returns nil when given a cookie missing session_token", function()
+			local auth_client = auth:new({})
+			assert.are.equal(nil, auth_client:authenticate("foo=bar"))
+		end)
+
+		it("returns the user id when given a cookie with a valid session token", function()
+      local helios = helios:new(expected_user_id)
+      spy.on(helios, "validate_token")
+
+      local auth_client = auth:new(helios)
+
+      local user_id = auth_client:authenticate("session_token=abcdefg")
+      assert.are.equal(expected_user_id, user_id)
+      assert.spy(helios.validate_token).was.called()
+		end)
+		
+	end)
 end)

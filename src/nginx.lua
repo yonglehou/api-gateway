@@ -32,9 +32,13 @@ end
 
 
 function nginx.authenticate(auth, cookie_string)
-  local cookie_map = cookie.parse(cookie_string)
-  if cookie_map.session_token then
-    return auth:authenticate_and_return_user_id(cookie_map.session_token)
+  if not cookie_string then
+    return nil
+  end
+
+  local user_id = auth:authenticate(cookie_string)
+  if user_id then
+    return user_id
   end
 
   return nil
