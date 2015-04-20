@@ -1,0 +1,8 @@
+language: lua
+install:
+  - sudo apt-get install luajit
+  - sudo apt-get install luarocks
+  - sudo luarocks install busted
+  - sudo luarocks install lua-csjon
+  - sudo luarocks install httpclient
+script: "busted spec"
