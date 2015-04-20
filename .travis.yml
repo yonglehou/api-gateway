@@ -1,8 +1,12 @@
 language: lua
 install:
+  - sudo apt-get update
+  - sudo apt-get install openssl
+  - sudo apt-get install libssl-dev
   - sudo apt-get install luajit
   - sudo apt-get install luarocks
+  - sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu/
   - sudo luarocks install busted
-  - sudo luarocks install lua-csjon
+  - sudo luarocks install lua-cjson
   - sudo luarocks install httpclient
 script: "busted spec"
