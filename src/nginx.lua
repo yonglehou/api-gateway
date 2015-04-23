@@ -1,18 +1,22 @@
 -- package nginx: An nginx auth handler
 
 local nginx = {}
-local net = require "httpclient"
+local net = require "nginx.net"
 local auth = require "auth"
 local helios = require "gateway.helios"
 local cookie = require "cookie"
+local util = require "util"
 
 function nginx.init(config)
-  local client = net.new()
-  client:set_default("timeout", config.SERVICE_HTTP_TIMEOUT)
+  config.HELIOS_URL = util.strip_trailing_slash(config.HELIOS_URL)
+  config.SERVICE_LB_URL = util.strip_trailing_slash(config.SERVICE_LB_URL)
+
+  local client = net:new(config.SERVICE_HTTP_TIMEOUT)
   local helios = helios:new(client, config.HELIOS_URL)
   local auth = auth:new(helios)
 
   return {
+    config = config,
     auth = auth,
     helios = helios,
     client = client
@@ -29,19 +33,32 @@ function nginx.healthcheck(app)
   end
 end
 
-
-
-function nginx.authenticate(auth, cookie_string)
+function nginx.authenticate(app, cookie_string)
   if not cookie_string then
     return nil
   end
 
-  local user_id = auth:authenticate(cookie_string)
+  local user_id = app.auth:authenticate(cookie_string)
   if user_id then
     return user_id
   end
 
   return nil
+end
+
+function nginx.service_proxy(app, service_path, user_id)
+  -- the X-Wikia-UserId header should either be set by a valid
+  -- user id or cleared
+  if user_id then
+    ngx.req.set_header("X-Wikia-UserId", user_id)
+  else
+    ngx.req.set_header("X-Wikia-UserId", "")
+  end
+
+  -- clear the cookie; it should not be sent to the backend
+  ngx.req.set_header("Cookie", "")
+
+  return ngx.exec(string.format("/sub/service/%s", service_path))
 end
 
 return nginx

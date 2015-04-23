@@ -23,8 +23,9 @@ end
 --
 function helios:validate_token(session_token)
   local url = self:request_url(session_token)
-  local status, res = pcall(function() return self.net:get(url) end)
-  if status and res.body then
+  local res, err = self.net:get(url)
+
+  if res and res.body then
     local status, data = pcall(function() return cjson.new().decode(res.body) end)
     if status and data and data.user_id then
       return data.user_id
