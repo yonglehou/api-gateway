@@ -87,3 +87,8 @@ dt push -a api-gateway -e prod
 ## Environement variables
 
  * `NGINX_BIN`: Set to the location of your nginx binary.
+
+## TODO
+
+ * I’m not a fan of OO in Lua. I think I would rather create an app table and
+ pass it around. It would be easier to test and manage state.
