@@ -1,6 +1,11 @@
 -- package nginx: An nginx auth handler
 
-local nginx = {}
+local SERVICE_PROXY_PATH = "/sub/service/"
+
+local nginx = {
+  SERVICE_PROXY_PATH = SERVICE_PROXY_PATH,
+}
+
 local net = require "nginx.net"
 local auth = require "auth"
 local helios = require "gateway.helios"
@@ -46,19 +51,20 @@ function nginx.authenticate(app, cookie_string)
   return nil
 end
 
-function nginx.service_proxy(app, service_path, user_id)
+function nginx.service_proxy(ngx, service_path, user_id)
   -- the X-Wikia-UserId header should either be set by a valid
   -- user id or cleared
   if user_id then
-    ngx.req.set_header("X-Wikia-UserId", user_id)
+    ngx.req.set_header(auth.USER_ID_HEADER, user_id)
   else
-    ngx.req.set_header("X-Wikia-UserId", "")
+    ngx.req.set_header(auth.USER_ID_HEADER, "")
   end
 
   -- clear the cookie; it should not be sent to the backend
   ngx.req.set_header("Cookie", "")
 
-  return ngx.exec(string.format("/sub/service/%s", service_path))
+  return ngx.exec(string.format("%s/%s", SERVICE_PROXY_PATH, service_path))
 end
+
 
 return nginx

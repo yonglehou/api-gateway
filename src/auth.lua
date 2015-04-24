@@ -1,5 +1,10 @@
 -- package auth
-local auth = {}
+
+local USER_ID_HEADER = "X-Wikia-UserId"
+local auth = {
+  USER_ID_HEADER = USER_ID_HEADER,
+}
+
 local cookie = require "cookie"
 
 function auth:new(helios)
