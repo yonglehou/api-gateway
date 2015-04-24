@@ -1,6 +1,6 @@
 -- package nginx: An nginx auth handler
 
-local SERVICE_PROXY_PATH = "/sub/service/"
+local SERVICE_PROXY_PATH = "/sub/service"
 
 local nginx = {
   SERVICE_PROXY_PATH = SERVICE_PROXY_PATH,
@@ -63,7 +63,8 @@ function nginx.service_proxy(ngx, service_path, user_id)
   -- clear the cookie; it should not be sent to the backend
   ngx.req.set_header("Cookie", "")
 
-  return ngx.exec(string.format("%s/%s", SERVICE_PROXY_PATH, service_path))
+  return ngx.exec(string.format("%s/%s", SERVICE_PROXY_PATH,
+    util.strip_leading_slash(service_path)))
 end
 
 
