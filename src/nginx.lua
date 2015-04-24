@@ -39,7 +39,7 @@ function nginx.healthcheck(app)
 end
 
 function nginx.authenticate(app, cookie_string)
-  if not cookie_string then
+  if not cookie_string or cookie_string == "" then
     return nil
   end
 

@@ -1,7 +1,8 @@
 local globals = require "test.helpers.globals"
 local auth = require "auth"
+local auth_mock = require "mocks.auth"
 
-describe("service proxy tests", function()
+describe("nginx module tests", function()
 
   before_each(function()
     req_mock = {
@@ -23,26 +24,50 @@ describe("service proxy tests", function()
     })
   end)
 
-  it("will set the user id header when supplied", function()
-    local nginx = require "nginx"
-    local user_id = 1234;
-    local ret = nginx.service_proxy(ngx, "/user-preference", user_id)
+  describe("service proxy tests", function()
+    
+    it("will set the user id header when supplied", function()
+      local nginx = require "nginx"
+      local user_id = 1234;
+      local ret = nginx.service_proxy(ngx, "/user-preference", user_id)
 
-    assert.stub(ngx.exec).was.called_with(
+      assert.stub(ngx.exec).was.called_with(
       string.format("%s/%s", nginx.SERVICE_PROXY_PATH, "/user-preference"))
 
-    assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, user_id)
-  end)
+      assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, user_id)
+    end)
 
-  it("will clear the user id header when the user id is not supplied", function()
-    local nginx = require "nginx"
-    local user_id = nil;
-    local ret = nginx.service_proxy(ngx, "/user-preference", user_id)
+    it("will clear the user id header when the user id is not supplied", function()
+      local nginx = require "nginx"
+      local user_id = nil;
+      local ret = nginx.service_proxy(ngx, "/user-preference", user_id)
 
-    assert.stub(ngx.exec).was.called_with(
+      assert.stub(ngx.exec).was.called_with(
       string.format("%s/%s", nginx.SERVICE_PROXY_PATH, "/user-preference"))
 
-    assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, "")
+      assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, "")
+    end)
+
   end)
 
+  describe("authenticate tests", function()
+    it("returns nil when the cookie_string is nil", function()
+      local nginx = require "nginx"
+      assert.are.equal(nil, nginx.authenticate({}, nil))
+      assert.are.equal(nil, nginx.authenticate({}, ""))
+    end)
+
+    it("returns nil when authenticate returns nil", function()
+      local auth = auth_mock:new(nil)
+      local nginx = require "nginx"
+      assert.are.equal(nil, nginx.authenticate({ auth = auth }, "foo=abcd"))
+    end)
+
+    it("returns the user id provided by authenticate", function()
+      local user_id = 12345;
+      local auth = auth_mock:new(user_id)
+      local nginx = require "nginx"
+      assert.are.equal(user_id, nginx.authenticate({ auth = auth }, "foo=abcd"))
+    end)
+  end)
 end)
