@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/Wikia/api-gateway.svg?branch=master)](https://travis-ci.org/Wikia/api-gateway)
-
 # API Gateway
 
 The API gateway provides a Lua package that can be integrated into a “host”
