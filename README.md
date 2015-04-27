@@ -77,7 +77,7 @@ dt push -a api-gateway -e prod
 ## Dependencies
 
  * [busted](http://olivinelabs.com/busted/)
- * [lua-httpclient](https://github.com/lusis/lua-httpclient). Can be installed with `luarocks`
+ * [lua-httpclient](https://github.com/lusis/lua-httpclient) Can be installed with `luarocks`
  * [lua-cjson](https://github.com/mpx/lua-cjson)
  * [nginx](http://nginx.org/)
  * [consul-template](https://github.com/hashicorp/consul-template)
