@@ -51,7 +51,7 @@ function nginx.authenticate(app, cookie_string)
   return nil
 end
 
-function nginx.service_proxy(ngx, service_path, user_id)
+function nginx.service_proxy(ngx, user_id)
   -- the X-Wikia-UserId header should either be set by a valid
   -- user id or cleared
   if user_id then
@@ -63,8 +63,7 @@ function nginx.service_proxy(ngx, service_path, user_id)
   -- clear the cookie; it should not be sent to the backend
   ngx.req.set_header("Cookie", "")
 
-  return ngx.exec(string.format("%s/%s", SERVICE_PROXY_PATH,
-    util.strip_leading_slash(service_path)))
+  return ngx.exec("@service")
 end
 
 
