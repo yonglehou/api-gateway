@@ -17,11 +17,11 @@ end
 
 -- 
 -- Authenticate a user based on the token.
--- @param session_token
+-- @param access_token
 -- @return user id
 --
-function auth:authenticate_and_return_user_id(session_token)
-  local user_id = self.helios:validate_token(session_token)
+function auth:authenticate_and_return_user_id(access_token)
+  local user_id = self.helios:validate_token(access_token)
   if user_id then
     return user_id
   end
@@ -35,8 +35,8 @@ function auth:authenticate(cookie_string)
   end
 
   local cookie_map = cookie.parse(cookie_string)
-  if cookie_map.session_token then
-    local user_id = self:authenticate_and_return_user_id(cookie_map.session_token)
+  if cookie_map.access_token then
+    local user_id = self:authenticate_and_return_user_id(cookie_map.access_token)
     if user_id then
       return user_id
     end

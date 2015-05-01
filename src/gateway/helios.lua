@@ -21,8 +21,8 @@ end
 -- @param session token
 -- @return user id | nil
 --
-function helios:validate_token(session_token)
-  local url = self:request_url(session_token)
+function helios:validate_token(access_token)
+  local url = self:request_url(access_token)
   local res, err = self.net:get(url)
 
   if res and res.body then
@@ -57,8 +57,8 @@ function helios:healthcheck()
 end
 
 
-function helios:request_url(session_token)
-  return string.format("%s/info?code=%s", self.helios_url, session_token)
+function helios:request_url(access_token)
+  return string.format("%s/info?code=%s", self.helios_url, access_token)
 end
 
 function helios:healthcheck_url()

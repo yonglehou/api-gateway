@@ -1,8 +1,8 @@
 local cookie = require "cookie"
 describe("cookie parsing", function()
   it("tests that we can parse a basic cookie", function()
-    local cookie_string = "session_token=1234"
-    local parsed_cookie = {session_token = "1234"}
+    local cookie_string = "access_token=1234"
+    local parsed_cookie = {access_token = "1234"}
     assert.are.same(parsed_cookie, cookie.parse(cookie_string))
   end)
 
@@ -13,8 +13,8 @@ describe("cookie parsing", function()
 
   describe("compound cookie parsing", function()
     before_each(function()
-      cookie_string = "session_token=1234; other_value=abced\""
-      parsed_cookie = {session_token = "1234",other_value = "abced\""}
+      cookie_string = "access_token=1234; other_value=abced\""
+      parsed_cookie = {access_token = "1234",other_value = "abced\""}
     end)
 
     it("tests that we can parse a compound cookie", function()
@@ -23,7 +23,7 @@ describe("cookie parsing", function()
 
     it("test that we find the cookie we expect", function()
       local cookie_map = cookie.parse(cookie_string)
-      assert.are.same(parsed_cookie.session_token, cookie_map.session_token)
+      assert.are.same(parsed_cookie.access_token, cookie_map.access_token)
     end)
   end)
 end)

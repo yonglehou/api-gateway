@@ -10,7 +10,7 @@ function helios:new(response_map)
   return setmetatable(out, { __index = self })
 end
 
-function helios:validate_token(session_token)
+function helios:validate_token(access_token)
   return self.response_map
 end
 
