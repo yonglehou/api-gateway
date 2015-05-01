@@ -21,7 +21,7 @@ busted spec
  * `/healthcheck`: Returns 200 status code on success. Checks to see that the
 	 helios heartbeat responds as expected.
  * `/service/(.*)`: Proxies requests to the service load balancers. See below
-	 for more details regarding the session token handling.
+	 for more details regarding the access token handling.
 
 
 If the `access_token` cookie exists and is not empty then an attempt will be

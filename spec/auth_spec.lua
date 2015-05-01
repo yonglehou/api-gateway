@@ -60,7 +60,7 @@ describe("authentication tests", function()
 			assert.are.equal(nil, auth_client:authenticate("foo=bar"))
 		end)
 
-		it("returns the user id when given a cookie with a valid session token", function()
+		it("returns the user id when given a cookie with a valid access token", function()
       local helios = helios:new(expected_user_id)
       spy.on(helios, "validate_token")
 

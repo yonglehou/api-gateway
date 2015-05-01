@@ -16,9 +16,9 @@ function helios:new(net, helios_url)
 end
 
 --
--- Validate a session token using Helios.
+-- Validate a access token using Helios.
 --
--- @param session token
+-- @param access token
 -- @return user id | nil
 --
 function helios:validate_token(access_token)
