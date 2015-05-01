@@ -24,12 +24,12 @@ busted spec
 	 for more details regarding the session token handling.
 
 
-If the `session_token` cookie exists and is not empty then an attempt will be
+If the `access_token` cookie exists and is not empty then an attempt will be
 made to authenticate the token against helios and retrieve the user id of the
 user to whom the token belongs. If a user id is returned from helios then that
 user id will be provided in the `X-Wikia-UserId` header sent to the service.
 
-If the `session_token` cookie is absent, expired, or invalid then no
+If the `access_token` cookie is absent, expired, or invalid then no
 `X-Wikia-UserId` will be sent to the service.
 
 ## Developing with Nginx Locally
@@ -46,7 +46,7 @@ To start:
 You can test the basic functionality with:
 
 ```
-curl -H “Cookie: session_token=<token>” http://127.0.0.1:8089/service/...
+curl -H “Cookie: access_token=<token>” http://127.0.0.1:8089/service/...
 ```
 
 ```
