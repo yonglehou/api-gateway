@@ -29,10 +29,9 @@ describe("nginx module tests", function()
     it("will set the user id header when supplied", function()
       local nginx = require "nginx"
       local user_id = 1234;
-      local ret = nginx.service_proxy(ngx, "/user-preference", user_id)
+      local ret = nginx.service_proxy(ngx, user_id)
 
-      assert.stub(ngx.exec).was.called_with(
-      string.format("%s%s", nginx.SERVICE_PROXY_PATH, "/user-preference"))
+      assert.stub(ngx.exec).was.called_with("@service")
 
       assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, user_id)
       assert.stub(ngx.req.set_header).was_called_with("Cookie", "")
@@ -41,10 +40,9 @@ describe("nginx module tests", function()
     it("will clear the user id header when the user id is not supplied", function()
       local nginx = require "nginx"
       local user_id = nil;
-      local ret = nginx.service_proxy(ngx, "/user-preference", user_id)
+      local ret = nginx.service_proxy(ngx, user_id)
 
-      assert.stub(ngx.exec).was.called_with(
-      string.format("%s%s", nginx.SERVICE_PROXY_PATH, "/user-preference"))
+      assert.stub(ngx.exec).was.called_with("@service")
 
       assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, "")
       assert.stub(ngx.req.set_header).was_called_with("Cookie", "")
