@@ -1,8 +1,8 @@
 local util = require("util")
 
 local upstream = {
-  default = require("default-locations"),
-  configured = require("configured-locations"),
+  default = require("default_locations"),
+  configured = require("configured_locations"),
 }
 
 function upstream.find(request_uri) 

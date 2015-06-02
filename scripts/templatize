@@ -10,7 +10,7 @@ if [[ -z $CONSUL_URI ]]; then
 	exit 1
 fi
 consul-template -consul $CONSUL_URI -template "$WORKING/templates/src/config.lua:$WORKING/src/config.lua"\
-	-template "$WORKING/templates/src/default-locations.lua:$WORKING/src/default-locations.lua"\
-	-template "$WORKING/templates/src/configured-locations.lua:$WORKING/src/configured-locations.lua"\
+	-template "$WORKING/templates/src/default_locations.lua:$WORKING/src/default_locations.lua"\
+	-template "$WORKING/templates/src/configured_locations.lua:$WORKING/src/configured_locations.lua"\
 	-template "$WORKING/templates/conf/upstreams.conf:$WORKING/nginx/production/upstreams.conf"\
 	-once

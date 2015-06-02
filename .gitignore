@@ -1,5 +1,5 @@
 src/config.lua
 nginx/logs
 nginx/production/upstreams.conf
-src/default-locations.lua
-src/configured-locations.lua
+src/default_locations.lua
+src/configured_locations.lua
