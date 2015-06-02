@@ -4,4 +4,13 @@
 #		your consul key value store.
 # 2. Run this with ./scripts/templatize your-consul-host:8500
 WORKING=$(dirname $0)/..
-consul-template -consul $1 -template "$WORKING/templates/src/config.lua:$WORKING/src/config.lua" -once
+CONSUL_URI=$1
+if [[ -z $CONSUL_URI ]]; then
+	echo Usage: scripts/templatize localhost:8500
+	exit 1
+fi
+consul-template -consul $CONSUL_URI -template "$WORKING/templates/src/config.lua:$WORKING/src/config.lua"\
+	-template "$WORKING/templates/src/default-locations.lua:$WORKING/src/default-locations.lua"\
+	-template "$WORKING/templates/src/configured-locations.lua:$WORKING/src/configured-locations.lua"\
+	-template "$WORKING/templates/conf/upstreams.conf:$WORKING/nginx/production/upstreams.conf"\
+	-once
