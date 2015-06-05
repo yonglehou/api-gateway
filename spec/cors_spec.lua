@@ -18,7 +18,7 @@ describe("Validate whitelist checking method", function()
   end)  
 end)
 
-describe("Response header handling", function()
+describe("Response CORS header handling", function()
   -- args are passed to supplied method
   function ngx_headers_allow_origin_and_origin(assert_fn, origin, response_headers, ngx_modifying_fn, ...)
     ngx = {
@@ -59,4 +59,28 @@ describe("Response header handling", function()
       ngx_headers_allow_origin_and_origin(assert.are.equal, "http://wikia.com", existing_headers, cors.set_whitelisted_allow_origin_header, true)
     end)
   end)  
+end)
+
+describe("Response Vary header handling", function()
+  describe("When Vary header already exists", function()
+    it("Correctly appends Origin to old header", function()
+      local ngx = {
+        header = {
+          Vary = "something"
+        }
+      }
+      cors.add_origin_to_vary_header(ngx)
+      assert.are.equal("something,Origin", ngx.header[cors.vary_header])
+    end)  
+  end)
+
+  describe("When there is no Vary Header", function()
+    it("Correctly sets Vary header", function()
+      local ngx = {
+        header = {}
+      }
+      cors.add_origin_to_vary_header(ngx)
+      assert.are.equal("Origin", ngx.header[cors.vary_header])    
+    end)
+  end)
 end)
