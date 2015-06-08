@@ -20,8 +20,7 @@ busted spec
 
  * `/healthcheck`: Returns 200 status code on success. Checks to see that the
 	 helios heartbeat responds as expected.
- * `/service/(.*)`: Proxies requests to the service load balancers. See below
-	 for more details regarding the access token handling.
+ * `/(.*)`: Proxies requests to the services. See below for more details regarding the access token handling. And routing mechanism
 
 
 If the `access_token` cookie exists and is not empty then an attempt will be
@@ -31,6 +30,51 @@ user id will be provided in the `X-Wikia-UserId` header sent to the service.
 
 If the `access_token` cookie is absent, expired, or invalid then no
 `X-Wikia-UserId` will be sent to the service.
+
+## Services routing
+
+For simplicity all service/tag pairs available in Consul are rendered in upstreams.conf as endpoints able to be consumed by any lua or nginx configuration. e.g. we have three helios services A, B registered with tag (prod) and C registered with tag (testing); they will be rendered in upstreams as
+
+```
+upstream prod_helios {
+   server A<ip>:A<port>;
+   server B<ip>:B<port>;
+}
+# and
+
+upstream testing_helios {
+	server C<ip>:C<port>;
+}
+```
+
+
+### Default routing
+
+For default configuration special tag "expose.production" and tag prefix "expose.*" is used to automatically find and exposed specific services to outside world through the gateway.
+
+All services tagged with *expose.production* upon successfull registration into Consul will trigger rerendering of default_locations.lua file which holds url mappings for services. Where e.g. helios with expose.production tag will be rendered as
+```
+url_routes['helios'] = "expose_production_helios"
+-- where 'helios' is url prefix i.e. http://api-gateway.example.com/helios
+-- and expose_production_helios is the name of rendered upstream where all the traffic from calls to urls prefixed with "helios" will be directed
+```
+
+*The urls are rewritten to remove the prefix*. before the request is made to final destination
+
+For other tags prefixed with "expose.*" the formula is a littlebit different. E.g. helios tagged with expose.testing will reder as
+```
+url_routes['testing.helios'] = "expose_testing_helios"
+-- where url prefix is created by first removing expose. prefix and concatenating remaining tag name with service name
+```
+
+### Configured routing
+
+For special cases as well as legacy compatibility. Single level url prefixes (i.e. prefix = "ship" and not "sailing/ship") can be configured to be routed to any available service irregardles of this service being tagged with expose.* or not.
+
+Configuration is taken from consul K/V prefixed with "auto_discovery/services". Where each key is rendered as:
+```
+url_routes[<key>] = <value>
+```
 
 ## Developing with Nginx Locally
 
