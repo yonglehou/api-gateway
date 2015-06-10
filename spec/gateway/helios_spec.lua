@@ -12,29 +12,24 @@ describe("validate_token tests", function()
 
     it("tests that we get a userid back", function()
       local net = net:new({body = string.format("{\"user_id\":%d}", expected_user_id)})
-      spy.on(net, "get")
 
       local helios = helios:new(net, "http://helios")
       local user_id = helios:validate_token(token)
       assert.are.equal(expected_user_id, user_id)
-      assert.spy(net.get).was.called()
     end)
 
     it("tests that we survive bad data back", function()
       local net = net:new({body = ""})
-      spy.on(net, "get")
 
       local helios = helios:new(net, "http://helios")
       local user_id = helios:validate_token(token)
       assert.are.equal(nil, user_id)
-      assert.spy(net.get).was.called()
     end)
   end)
 
   describe("health check", function()
     before_each(function()
       net = net:new({body = "Service status: OK", code = 200})
-      spy.on(net, "get")
       helios = helios:new(net, "http://helios")
     end)
 
