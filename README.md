@@ -61,7 +61,7 @@ url_routes['helios'] = "expose_production_helios"
 
 *The urls are rewritten to remove the prefix*. before the request is made to final destination
 
-For other tags prefixed with "expose.*" the formula is a littlebit different. E.g. helios tagged with expose.testing will reder as
+For other tags prefixed with "expose.*" the formula is a little bit different. E.g. helios tagged with expose.testing will render as
 ```
 url_routes['testing.helios'] = "expose_testing_helios"
 -- where url prefix is created by first removing expose. prefix and concatenating remaining tag name with service name
