@@ -14,7 +14,7 @@ end
 
 function net:request(url, request_method, request_headers, body)
   if not request_headers then
-    request_headers = ngx.req.get_headers(20)
+    request_headers = ngx.req.get_headers(100)
   end
 
   local httpc = http.new()

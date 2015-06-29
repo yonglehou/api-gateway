@@ -33,7 +33,7 @@ function cors.origin_matches_whitelist(origin_value)
 end
 
 function cors.get_origin_that_matches_whitelist(ngx)
-  local req_headers = ngx.req.get_headers(20)
+  local req_headers = ngx.req.get_headers(100)
   local origin = req_headers[cors.origin_header]
 
   if cors.origin_matches_whitelist(origin) then
@@ -46,7 +46,7 @@ end
 function cors.set_whitelisted_allow_origin_header(ngx, override_existing)
   -- check if already set then don't override
   if ngx.header[cors.allow_origin_header] == nil or override_existing then
-    local req_headers = ngx.req.get_headers(20)
+    local req_headers = ngx.req.get_headers(100)
     local origin = req_headers[cors.origin_header]
 
     if cors.origin_matches_whitelist(origin) then
