@@ -72,15 +72,16 @@ function cors.set_whitelisted_control_headers(ngx)
 end
 
 function cors.add_origin_to_vary_header(ngx)
-  local old_header = ngx.header.Vary
-  local target_header
+  local header = ngx.header.Vary
 
-  if old_header ~= nil and old_header ~= "" then
-    target_header = old_header .. "," .. cors.origin_header
-  else
-    target_header = cors.origin_header
+  if header == nil then
+    header = {}
+  elseif type(header) ~= "table" then
+    header = { header }
   end
-  ngx.header.Vary = target_header
+
+  table.insert(header, cors.origin_header)
+  ngx.header.Vary = table.concat(header, ",")
 end
 
 return cors

@@ -81,7 +81,7 @@ describe("Response Vary header handling", function()
         }
       }
       cors.add_origin_to_vary_header(ngx)
-      assert.are.equal("something,Origin", ngx.header[cors.vary_header])
+      assert.are.same("something,Origin", ngx.header[cors.vary_header])
     end)
   end)
 
@@ -91,7 +91,7 @@ describe("Response Vary header handling", function()
         header = {}
       }
       cors.add_origin_to_vary_header(ngx)
-      assert.are.equal("Origin", ngx.header[cors.vary_header])
+      assert.are.same("Origin", ngx.header[cors.vary_header])
     end)
   end)
 end)
