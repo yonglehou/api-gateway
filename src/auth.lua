@@ -1,8 +1,11 @@
 -- package auth
 
 local USER_ID_HEADER = "X-Wikia-UserId"
+local ACCESS_TOKEN_HEADER = "X-Wikia-AccessToken"
+
 local auth = {
   USER_ID_HEADER = USER_ID_HEADER,
+  ACCESS_TOKEN_HEADER = ACCESS_TOKEN_HEADER,
 }
 
 local cookie = require "cookie"
@@ -29,7 +32,7 @@ function auth:authenticate_and_return_user_id(access_token)
   return nil
 end
 
-function auth:authenticate(cookie_string)
+function auth:authenticate_by_cookie(cookie_string)
   if not cookie_string then
     return nil
   end

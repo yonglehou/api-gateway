@@ -50,24 +50,45 @@ describe("nginx module tests", function()
 
   end)
 
-  describe("authenticate tests", function()
+  describe("authenticate using cookie tests", function()
     it("returns nil when the cookie_string is nil", function()
       local nginx = require "nginx"
-      assert.are.equal(nil, nginx.authenticate({}, nil))
-      assert.are.equal(nil, nginx.authenticate({}, ""))
+      assert.are.equal(nil, nginx.authenticate({}, { ["Cookie"] = nil }))
+      assert.are.equal(nil, nginx.authenticate({}, { ["Cookie"] = "" }))
     end)
 
     it("returns nil when authenticate returns nil", function()
       local auth = auth_mock:new(nil)
       local nginx = require "nginx"
-      assert.are.equal(nil, nginx.authenticate({ auth = auth }, "foo=abcd"))
+      assert.are.equal(nil, nginx.authenticate({ auth = auth }, { ["Cookie"] = "foo=abcd" }))
     end)
 
     it("returns the user id provided by authenticate", function()
       local user_id = 12345;
       local auth = auth_mock:new(user_id)
       local nginx = require "nginx"
-      assert.are.equal(user_id, nginx.authenticate({ auth = auth }, "foo=abcd"))
+      assert.are.equal(user_id, nginx.authenticate({ auth = auth }, { ["Cookie"] = "foo=abcd" }))
+    end)
+  end)
+
+  describe("authenticate using access token header tests", function()
+    it("returns nil when the cookie_string is nil", function()
+      local nginx = require "nginx"
+      assert.are.equal(nil, nginx.authenticate({}, { [auth.ACCESS_TOKEN_HEADER] = nil }))
+      assert.are.equal(nil, nginx.authenticate({}, { [auth.ACCESS_TOKEN_HEADER] = "" }))
+    end)
+
+    it("returns nil when authenticate returns nil", function()
+      local auth_mock = auth_mock:new(nil)
+      local nginx = require "nginx"
+      assert.are.equal(nil, nginx.authenticate({ auth = auth_mock }, { [auth.ACCESS_TOKEN_HEADER] = "abcd" }))
+    end)
+
+    it("returns the user id provided by authenticate", function()
+      local user_id = 12345;
+      local auth_mock = auth_mock:new(user_id)
+      local nginx = require "nginx"
+      assert.are.equal(user_id, nginx.authenticate({ auth = auth_mock }, { [auth.ACCESS_TOKEN_HEADER] = "abcd" }))
     end)
   end)
 end)

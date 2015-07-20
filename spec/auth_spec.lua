@@ -39,18 +39,18 @@ describe("authentication tests", function()
 
 		it("returns nil when given a nil cookie", function()
 			local auth_client = auth:new({})
-			assert.are.equal(nil, auth_client:authenticate(nil))
+			assert.are.equal(nil, auth_client:authenticate_by_cookie(nil))
 		end)
 
 		it("returns nil when given an empty cookie", function()
 			local auth_client = auth:new({})
-			assert.are.equal(nil, auth_client:authenticate(""))
+			assert.are.equal(nil, auth_client:authenticate_by_cookie(""))
 
 		end)
 
 		it("returns nil when given a cookie missing access_token", function()
 			local auth_client = auth:new({})
-			assert.are.equal(nil, auth_client:authenticate("foo=bar"))
+			assert.are.equal(nil, auth_client:authenticate_by_cookie("foo=bar"))
 		end)
 
 		it("returns the user id when given a cookie with a valid access token", function()
@@ -58,7 +58,7 @@ describe("authentication tests", function()
 
       local auth_client = auth:new(helios)
 
-      local user_id = auth_client:authenticate("access_token=abcdefg")
+      local user_id = auth_client:authenticate_by_cookie("access_token=abcdefg")
       assert.are.equal(expected_user_id, user_id)
 		end)
 
