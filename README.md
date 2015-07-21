@@ -16,6 +16,23 @@ the following:
 busted spec
 ```
 
+## Local Integration Testing
+
+The integration testing local to this repository also uses busted. To run the
+integration tests do the following:
+
+```
+busted spec_integration
+```
+
+The integration tests require the following environment variables:
+
+ * `USERNAME`: the user name used to request a token from helios
+ * `PASSWORD`: the password used to request a token from helios
+ * `LOGIN_URL`: the login URL for helios
+ * `SERVICE_URL`: the service URL to attempt `GET` once a token has been
+	 aquired. This URL should require a token for the tests to work as expected.
+
 ## Resources
 
  * `/healthcheck`: Returns 200 status code on success. Checks to see that the
