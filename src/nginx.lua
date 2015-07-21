@@ -38,14 +38,26 @@ function nginx.healthcheck(app)
   end
 end
 
-function nginx.authenticate(app, cookie_string)
-  if not cookie_string or cookie_string == "" then
+function nginx.authenticate(app, headers)
+  local user_id = nil
+  if type(headers) ~= "table" then
     return nil
   end
 
-  local user_id = app.auth:authenticate(cookie_string)
-  if user_id then
-    return user_id
+  local cookie_string = headers[cookie.COOKIE_HEADER]
+  if cookie_string and cookie_string ~= "" then
+    user_id = app.auth:authenticate_by_cookie(cookie_string)
+    if user_id then
+      return user_id
+    end
+  end
+
+  local token = headers[auth.ACCESS_TOKEN_HEADER]
+  if token and token ~= "" then
+    user_id = app.auth:authenticate_and_return_user_id(token)
+    if user_id then
+      return user_id
+    end
   end
 
   return nil
@@ -61,7 +73,7 @@ function nginx.service_proxy(ngx, user_id)
   end
 
   -- clear the cookie; it should not be sent to the backend
-  ngx.req.set_header("Cookie", "")
+  ngx.req.set_header(cookie.COOKIE_HEADER, "")
 
   return ngx.exec("@service")
 end

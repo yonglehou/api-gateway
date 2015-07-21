@@ -1,6 +1,10 @@
 -- package cookie: naive cookie parsing
 -- basic functionality from https://github.com/frodsan/cookie.lua/blob/master/cookie.lua
-local cookie = {}
+local COOKIE_HEADER = "Cookie"
+
+local cookie = {
+	COOKIE_HEADER = COOKIE_HEADER,
+}
 
 local gmatch = string.gmatch
 local sub    = string.sub
