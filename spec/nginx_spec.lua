@@ -1,4 +1,5 @@
 local globals = require "test.helpers.globals"
+local cookie = require "cookie"
 local auth = require "auth"
 local auth_mock = require "mocks.auth"
 
@@ -34,7 +35,7 @@ describe("nginx module tests", function()
       assert.stub(ngx.exec).was.called_with("@service")
 
       assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, user_id)
-      assert.stub(ngx.req.set_header).was_called_with("Cookie", "")
+      assert.stub(ngx.req.set_header).was_called_with(cookie.COOKIE_HEADER, "")
     end)
 
     it("will clear the user id header when the user id is not supplied", function()
@@ -45,7 +46,7 @@ describe("nginx module tests", function()
       assert.stub(ngx.exec).was.called_with("@service")
 
       assert.stub(ngx.req.set_header).was_called_with(auth.USER_ID_HEADER, "")
-      assert.stub(ngx.req.set_header).was_called_with("Cookie", "")
+      assert.stub(ngx.req.set_header).was_called_with(cookie.COOKIE_HEADER, "")
     end)
 
   end)
@@ -53,21 +54,21 @@ describe("nginx module tests", function()
   describe("authenticate using cookie tests", function()
     it("returns nil when the cookie_string is nil", function()
       local nginx = require "nginx"
-      assert.are.equal(nil, nginx.authenticate({}, { ["Cookie"] = nil }))
-      assert.are.equal(nil, nginx.authenticate({}, { ["Cookie"] = "" }))
+      assert.are.equal(nil, nginx.authenticate({}, { [cookie.COOKIE_HEADER] = nil }))
+      assert.are.equal(nil, nginx.authenticate({}, { [cookie.COOKIE_HEADER] = "" }))
     end)
 
     it("returns nil when authenticate returns nil", function()
       local auth = auth_mock:new(nil)
       local nginx = require "nginx"
-      assert.are.equal(nil, nginx.authenticate({ auth = auth }, { ["Cookie"] = "foo=abcd" }))
+      assert.are.equal(nil, nginx.authenticate({ auth = auth }, { [cookie.COOKIE_HEADER] = "foo=abcd" }))
     end)
 
     it("returns the user id provided by authenticate", function()
       local user_id = 12345;
       local auth = auth_mock:new(user_id)
       local nginx = require "nginx"
-      assert.are.equal(user_id, nginx.authenticate({ auth = auth }, { ["Cookie"] = "foo=abcd" }))
+      assert.are.equal(user_id, nginx.authenticate({ auth = auth }, { [cookie.COOKIE_HEADER] = "foo=abcd" }))
     end)
   end)
 

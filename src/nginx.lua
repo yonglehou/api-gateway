@@ -44,7 +44,7 @@ function nginx.authenticate(app, headers)
     return nil
   end
 
-  local cookie_string = headers["Cookie"]
+  local cookie_string = headers[cookie.COOKIE_HEADER]
   if cookie_string and cookie_string ~= "" then
     user_id = app.auth:authenticate_by_cookie(cookie_string)
     if user_id then
@@ -73,7 +73,7 @@ function nginx.service_proxy(ngx, user_id)
   end
 
   -- clear the cookie; it should not be sent to the backend
-  ngx.req.set_header("Cookie", "")
+  ngx.req.set_header(cookie.COOKIE_HEADER, "")
 
   return ngx.exec("@service")
 end
