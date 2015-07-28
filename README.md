@@ -119,7 +119,7 @@ To stop:
 You can test the basic functionality with:
 
 ```
-curl -H “Cookie: access_token=<token>” http://127.0.0.1:8089/service/...
+curl -H "Cookie: access_token=<token>" http://127.0.0.1:8100/<service_name>/...
 ```
 
 The current implementation relies upon DNS to resolve the load balancers. This
