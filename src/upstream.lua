@@ -5,6 +5,8 @@ local upstream = {
   configured = require("configured_locations"),
 }
 
+-- We use this to determine if the upstream exists. If it does not then we can
+-- return a placeholder for generating a 404.
 function upstream.find(request_uri) 
   local first_url_token = util.get_url_prefix(request_uri)
   
