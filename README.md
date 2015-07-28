@@ -149,7 +149,15 @@ dt push -a api-gateway -e prod
 
  * `NGINX_BIN`: Set to the location of your nginx binary.
 
+## Contributors
+
+ * [Artur Klajnerok](https://github.com/ArturKlajnerok)
+ * [Damon Snyder](https://github.com/drsnyder)
+ * [Frank Farmer](https://github.com/frankfarmer)
+ * [Jarek Cellary](https://github.com/jcellary)
+ * [Pawel Chojnacki](https://github.com/pchojnacki)
+
 ## TODO
 
- * I’m not a fan of OO in Lua. I think I would rather create an app table and
- pass it around. It would be easier to test and manage state.
+ * Create an app table and pass it around. This will provide an easy and light on-ramp to
+   dependency injection which should help improve the testability.
