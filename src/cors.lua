@@ -14,7 +14,7 @@ local cors = {
   allow_credentials_header = "Access-Control-Allow-Credentials",
 
   allow_headers_default_value = "*",
-  allow_methods_default_value = "*",
+  allow_methods_default_value = "POST,GET,OPTIONS,PUT,DELETE",
   allow_credentials_default_value = "true",
 
 }
