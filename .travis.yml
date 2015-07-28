@@ -1,4 +1,5 @@
 language: lua
+<<<<<<< HEAD
 install:
   - sudo apt-get update
   - sudo apt-get install openssl
@@ -10,4 +11,21 @@ install:
   - sudo luarocks install busted 2.0.rc10-0
   - sudo luarocks install lua-cjson 2.1.0-1
   - sudo luarocks install httpclient 0.1.0-7
+=======
+addons:
+  apt:
+    packages:
+    - cmake
+    - libssl-dev
+    - luajit
+    - luarocks
+    - lua-resty-http
+
+install:  
+  - luarocks install lua-resty-http
+  - luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu/
+  - luarocks install busted
+  - luarocks install lua-cjson
+  - luarocks install httpclient
+>>>>>>> travis fix
 script: "busted spec"
