@@ -101,17 +101,25 @@ nginx config file in `nginx/conf/nginx.conf` should be enough to test.
 To start:
 
 ```
-./scripts/nginx-start
+./scripts/start-nginx
+```
+
+To reload:
+
+```
+./scripts/reload-nginx
+```
+
+To stop:
+
+```
+./scripts/stop-nginx
 ```
 
 You can test the basic functionality with:
 
 ```
 curl -H “Cookie: access_token=<token>” http://127.0.0.1:8089/service/...
-```
-
-```
-./scripts/nginx-reload
 ```
 
 The current implementation relies upon DNS to resolve the load balancers. This
