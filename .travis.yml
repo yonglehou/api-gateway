@@ -5,7 +5,7 @@ install:
   - sudo apt-get install libssl-dev
   - sudo apt-get install luajit
   - sudo apt-get install luarocks
-  - sudo luarocks install lua-resty-http
+  - sudo luarocks install lua-resty-http 0.1-0
   - sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu/
   - sudo luarocks install busted
   - sudo luarocks install lua-cjson
