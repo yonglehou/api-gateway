@@ -48,50 +48,36 @@ user id will be provided in the `X-Wikia-UserId` header sent to the service.
 If the `access_token` cookie is absent, expired, or invalid then no
 `X-Wikia-UserId` will be sent to the service.
 
-## Services routing
+## Service Routing
 
-For simplicity all service/tag pairs available in Consul are rendered in upstreams.conf as endpoints able to be consumed by any lua or nginx configuration. e.g. we have three helios services A, B registered with tag (prod) and C registered with tag (testing); they will be rendered in upstreams as
+Only services configured in consul under `/{DATACENTER}/kv/registry/{ENV}/api-gateway`
+are registered and routed via the api-gateway. See the [service
+registry](https://github.com/Wikia/guidelines/tree/master/ConsulAndServiceDiscovery#service-registries)
+guidelines for more information.
+
+The configuration works as follows. If `prod.helios` is provided as the value to
+the `auth` key under the consul key value path above then the following
+configuration will be produced in nginx:
 
 ```
 upstream prod_helios {
    server A<ip>:A<port>;
    server B<ip>:B<port>;
 }
-# and
-
-upstream testing_helios {
-	server C<ip>:C<port>;
-}
 ```
 
+Similarly, the gateway will include an upstream configuration with the following
+key value pairs:
 
-### Default routing
-
-For default configuration special tag "expose.production" and tag prefix "expose.*" is used to automatically find and exposed specific services to outside world through the gateway.
-
-All services tagged with *expose.production* upon successfull registration into Consul will trigger rerendering of default_locations.lua file which holds url mappings for services. Where e.g. helios with expose.production tag will be rendered as
 ```
-url_routes['helios'] = "expose_production_helios"
--- where 'helios' is url prefix i.e. http://api-gateway.example.com/helios
--- and expose_production_helios is the name of rendered upstream where all the traffic from calls to urls prefixed with "helios" will be directed
+url_routes["auth"] = "prod_helios"
 ```
 
-*The urls are rewritten to remove the prefix*. before the request is made to final destination
+Note that some sanitization is done on the `{tag}.{service}` values used to
+reference APIs to ensure they are compatible with nginx.
 
-For other tags prefixed with "expose.*" the formula is a little bit different. E.g. helios tagged with expose.testing will render as
-```
-url_routes['testing.helios'] = "expose_testing_helios"
--- where url prefix is created by first removing expose. prefix and concatenating remaining tag name with service name
-```
-
-### Configured routing
-
-For special cases as well as legacy compatibility. Single level url prefixes (i.e. prefix = "ship" and not "sailing/ship") can be configured to be routed to any available service irregardles of this service being tagged with expose.* or not.
-
-Configuration is taken from consul K/V prefixed with "auto_discovery/services". Where each key is rendered as:
-```
-url_routes[<key>] = <value>
-```
+In the examples above, `{DATACENTER}` is the consul datacenter and `{ENV}` is
+the environment as specificed by the `WIKIA_ENVIRONMENT` environment variable.
 
 ## Developing with Nginx Locally
 
