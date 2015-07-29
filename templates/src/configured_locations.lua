@@ -17,6 +17,6 @@
    */}}
 local url_routes = {}
 {{range $item := tree $gatewayTree}}{{$key := $item.Key | regexReplaceAll "[^a-zA-Z0-9-_.]" "_"}}
-url_routes["{{$key}}"] =  "{{template "escape" $item.Value}}" # {{$item.Value}}.service.consul
+url_routes["{{$key}}"] =  "{{template "escape" $item.Value}}" -- {{$item.Value}}.service.consul
 {{end}}
 return url_routes

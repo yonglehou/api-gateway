@@ -1,7 +1,7 @@
 local util = require("util")
 
 local upstream = {
-  configured = require("configured_locations"),
+  configured = require("configured_locations")
 }
 
 -- We use this to determine if the upstream exists. If it does not then we can
