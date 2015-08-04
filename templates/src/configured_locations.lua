@@ -8,16 +8,16 @@
    *  /registry/dev/api-gateway/auth => dev.helios
    *
    *  # here
-   *  url_routes["auth"] = "dev_helios"
+   *  url_routes["auth"] = "auth_dev_helios"
    *
    *  # nginx
-   *  upstream dev_helios { }
+   *  upstream auth_dev_helios { }
    *
    *  The intention here is to create a config that will map intuitively to a consul address.
    */}}
 local url_routes = {}
 {{range $item := tree $gatewayTree}}{{$key := $item.Key | regexReplaceAll "[^a-zA-Z0-9-_.]" "_"}}
 {{with $queryResult := service $item.Value}}{{if $queryResult}}{{/* make sure there are services registered */}}
-url_routes["{{$key}}"] =  "{{template "escape" $item.Value}}" -- {{$item.Value}}.service.consul
+url_routes["{{$key}}"] =  "{{template "escape" $item.Key}}_{{template "escape" $item.Value}}" -- {{$item.Value}}.service.consul
 {{end}}{{end}}{{end}}
 return url_routes
