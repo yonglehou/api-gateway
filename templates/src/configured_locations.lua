@@ -1,15 +1,23 @@
 {{define "escape"}}{{.| regexReplaceAll "[^a-zA-Z0-9]" "_"}}{{end}}
-{{define "urlEscape"}}{{.| regexReplaceAll "[^a-zA-Z0-9-_.]" "_"}}{{end}}
-local url_routes = {}
-{{range $item := tree "auto_discovery/services"}}
-{{ if $item.Key | regexMatch ".*/.*" }}{{else}}{{ if $item.Key | regexMatch ".+"}}
-{{ if $item.Value | regexMatch ".*@.*"}}
+{{$env := env "WIKIA_ENVIRONMENT"}}{{$gatewayTree := printf "registry/%s/api-gateway" $env}}
 {{/*
-// if @ is present in the Value then it means its a cross dc query to support cross dc queries different
-// set of upstream servers needs to be setup */}}
-url_routes["{{template "urlEscape" $item.Key}}"] =  "{{template "escape" $item.Key }}_{{template "escape" $item.Value }}"
-{{else}}
-url_routes["{{template "urlEscape" $item.Key}}"] =  "{{template "escape" $item.Value }}"
+   * Creates a mapping between the service name (matched as the first part of
+   * the URI) and an nginx-safe upstream name. Example:
+   *
+   *  # in consul
+   *  /registry/dev/api-gateway/auth => dev.helios
+   *
+   *  # here
+   *  url_routes["auth"] = "auth_dev_helios"
+   *
+   *  # nginx
+   *  upstream auth_dev_helios { }
+   *
+   *  The intention here is to create a config that will map intuitively to a consul address.
+   */}}
+local url_routes = {}
+{{range $item := tree $gatewayTree}}{{$key := $item.Key | regexReplaceAll "[^a-zA-Z0-9-_.]" "_"}}
+{{with $queryResult := service $item.Value}}{{if $queryResult}}{{/* make sure there are services registered */}}
+url_routes["{{$key}}"] =  "{{template "escape" $item.Key}}_{{template "escape" $item.Value}}" -- {{$item.Value}}.service.consul
 {{end}}{{end}}{{end}}
-{{end}}
 return url_routes
