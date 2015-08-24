@@ -21,7 +21,9 @@ describe("nginx module tests", function()
     globals.declare("ngx",
     {
       socket = { tcp = nil },
-      re = { match = nil }
+      re = { match = nil },
+      req = { socket = nil },
+      config = { ngx_lua_version = "0.x" },
     })
   end)
 

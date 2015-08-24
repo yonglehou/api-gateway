@@ -6,18 +6,17 @@ local nginx = {
   SERVICE_PROXY_PATH = SERVICE_PROXY_PATH,
 }
 
-local net = require "nginx.net"
 local auth = require "auth"
 local helios = require "gateway.helios"
 local cookie = require "cookie"
 local util = require "util"
+local http = require "resty.http"
 
 function nginx.init(config)
   config.HELIOS_URL = util.strip_trailing_slash(config.HELIOS_URL)
   config.SERVICE_LB_URL = util.strip_trailing_slash(config.SERVICE_LB_URL)
 
-  local client = net:new(config.SERVICE_HTTP_TIMEOUT)
-  local helios = helios:new(client, config.HELIOS_URL)
+  local helios = helios:new(ngx)
   local auth = auth:new(helios)
 
   return {
@@ -28,15 +27,6 @@ function nginx.init(config)
   }
 end
 
-function nginx.healthcheck(app)
-  local is_up, res = app.helios:healthcheck()
-  if is_up then
-    ngx.say("Service status: OK")
-  else
-    ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
-    ngx.say("Error connecting to helios: " .. res)
-  end
-end
 
 function nginx.authenticate(app, headers)
   local user_id = nil
