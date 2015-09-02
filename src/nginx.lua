@@ -64,6 +64,7 @@ function nginx.service_proxy(ngx, user_id)
 
   -- clear the cookie; it should not be sent to the backend
   ngx.req.set_header(cookie.COOKIE_HEADER, "")
+  ngx.req.set_header(auth.ACCESS_TOKEN_HEADER, "")
 
   return ngx.exec("@service")
 end
