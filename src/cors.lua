@@ -13,7 +13,7 @@ local cors = {
   allow_methods_header = "Access-Control-Allow-Methods",
   allow_credentials_header = "Access-Control-Allow-Credentials",
 
-  allow_headers_default_value = "*",
+  allow_headers_default_value = "Content-Type, Accept",
   allow_methods_default_value = "POST,GET,OPTIONS,PUT,DELETE",
   allow_credentials_default_value = "true",
 
