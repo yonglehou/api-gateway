@@ -32,7 +32,7 @@ function auth:authenticate_and_return_user_id(access_token)
   return nil
 end
 
-function auth:access_token_to_user_id(cookie_string)
+function auth:cookie_string_to_user_id(cookie_string)
   local cookie_map = cookie.parse(cookie_string)
   if cookie_map.access_token then
     return self:authenticate_and_return_user_id(cookie_map.access_token)
@@ -51,13 +51,13 @@ function auth:authenticate_by_cookie(cookie_thing)
   -- see https://github.com/openresty/lua-nginx-module#ngxreqget_headers
   if is_table(cookie_thing) then
     for _, cookie_string in ipairs(cookie_thing) do
-      local user_id = self:access_token_to_user_id(cookie_string)
+      local user_id = self:cookie_string_to_user_id(cookie_string)
       if user_id then
         return user_id
       end
     end
   else
-    return self:access_token_to_user_id(cookie_thing)
+    return self:cookie_string_to_user_id(cookie_thing)
   end
 end
 
