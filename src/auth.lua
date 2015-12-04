@@ -46,6 +46,9 @@ function auth:authenticate_by_cookie(cookie_thing)
     return nil
   end
 
+  -- if there are multiple 'Cookie' headers then ngx.req.headers()['Cookie']
+  -- will be a table (array)
+  -- see https://github.com/openresty/lua-nginx-module#ngxreqget_headers
   if is_table(cookie_thing) then
     for _, cookie_string in ipairs(cookie_thing) do
       local user_id = self:access_token_to_user_id(cookie_string)
