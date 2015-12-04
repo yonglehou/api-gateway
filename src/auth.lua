@@ -41,23 +41,23 @@ function auth:cookie_string_to_user_id(cookie_string)
   return nil
 end
 
-function auth:authenticate_by_cookie(cookie_thing)
-  if not cookie_thing then
+function auth:authenticate_by_cookie(cookie_container)
+  if not cookie_container then
     return nil
   end
 
   -- if there are multiple 'Cookie' headers then ngx.req.headers()['Cookie']
   -- will be a table (array)
   -- see https://github.com/openresty/lua-nginx-module#ngxreqget_headers
-  if is_table(cookie_thing) then
-    for _, cookie_string in ipairs(cookie_thing) do
+  if is_table(cookie_container) then
+    for _, cookie_string in ipairs(cookie_container) do
       local user_id = self:cookie_string_to_user_id(cookie_string)
       if user_id then
         return user_id
       end
     end
   else
-    return self:cookie_string_to_user_id(cookie_thing)
+    return self:cookie_string_to_user_id(cookie_container)
   end
 end
 
