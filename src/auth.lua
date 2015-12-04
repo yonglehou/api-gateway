@@ -32,20 +32,34 @@ function auth:authenticate_and_return_user_id(access_token)
   return nil
 end
 
-function auth:authenticate_by_cookie(cookie_string)
-  if not cookie_string then
-    return nil
-  end
-
+function auth:access_token_to_user_id(cookie_string)
   local cookie_map = cookie.parse(cookie_string)
   if cookie_map.access_token then
-    local user_id = self:authenticate_and_return_user_id(cookie_map.access_token)
-    if user_id then
-      return user_id
-    end
+    return self:authenticate_and_return_user_id(cookie_map.access_token)
   end
 
   return nil
+end
+
+function auth:authenticate_by_cookie(cookie_thing)
+  if not cookie_thing then
+    return nil
+  end
+
+  if is_table(cookie_thing) then
+    for _, cookie_string in ipairs(cookie_thing) do
+      local user_id = self:access_token_to_user_id(cookie_string)
+      if user_id then
+        return user_id
+      end
+    end
+  else
+    return self:access_token_to_user_id(cookie_thing)
+  end
+end
+
+function is_table(thing)
+  return type(thing) == "table"
 end
 
 return auth

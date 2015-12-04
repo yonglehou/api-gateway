@@ -63,4 +63,38 @@ describe("authentication tests", function()
 		end)
 
 	end)
+
+	describe("multiple cookie header parsing", function()
+		before_each(function()
+			cookie_strings_first = {"access_token=1234; other_value=abced\"", "foo=bar; something=otherthing;"}
+			cookie_strings_second = {"foo=bar; something=otherthing;", "access_token=1234; other_value=abced\""}
+		end)
+
+		it("tests that we can handle a table with no token", function()
+			local helios = helios:new(expected_user_id)
+
+			local auth_client = auth:new(helios)
+
+			local user_id = auth_client:authenticate_by_cookie({"foo=bar; a=b", "b=a; bar=foo"})
+			assert.are.equal(nil, user_id)
+		end)
+
+		it("tests that we can handle a table with the token in the first element", function()
+			local helios = helios:new(expected_user_id)
+
+			local auth_client = auth:new(helios)
+
+			local user_id = auth_client:authenticate_by_cookie(cookie_strings_first)
+			assert.are.equal(expected_user_id, user_id)
+		end)
+
+		it("tests that we can handle a table with the token in the second element", function()
+			local helios = helios:new(expected_user_id)
+
+			local auth_client = auth:new(helios)
+
+			local user_id = auth_client:authenticate_by_cookie(cookie_strings_second)
+			assert.are.equal(expected_user_id, user_id)
+		end)
+	end)
 end)
