@@ -131,6 +131,21 @@ dt push -a api-gateway -e prod
  * [nginx](http://nginx.org/)
  * [consul-template](https://github.com/hashicorp/consul-template)
 
+## Installing luarocks & openresty Dependencies
+
+ ```
+ export LUAJIT_PATH=/usr/local/Cellar/openresty/1.7.10.1/luajit # set to your local path
+ wget http://luarocks.org/releases/luarocks-2.0.11.tar.gz
+ tar -xzvf luarocks-2.0.11.tar.gz
+ cd luarocks-2.0.13/
+ ./configure --prefix=$LUAJIT_PATH \
+     --with-lua=$LUAJIT_PATH \
+		 --lua-suffix=jit-2.1.0-alpha \
+	   --with-lua-include=$LUAJIT_PATH/include/luajit-2.1
+ make
+ make install
+ ```
+
 ## Environement variables
 
  * `NGINX_BIN`: Set to the location of your nginx binary.
