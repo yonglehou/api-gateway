@@ -32,7 +32,7 @@ describe("nginx module tests", function()
     it("will set the user id header when supplied", function()
       local nginx = require "nginx"
       local user_id = 1234;
-      local ret = nginx.service_proxy(ngx, user_id)
+      local ret = nginx.service_proxy(ngx, user_id, {})
 
       assert.stub(ngx.exec).was.called_with("@service")
 
@@ -43,7 +43,7 @@ describe("nginx module tests", function()
     it("will clear the user id header when the user id is not supplied", function()
       local nginx = require "nginx"
       local user_id = nil;
-      local ret = nginx.service_proxy(ngx, user_id)
+      local ret = nginx.service_proxy(ngx, user_id, {})
 
       assert.stub(ngx.exec).was.called_with("@service")
 

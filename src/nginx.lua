@@ -70,7 +70,9 @@ function nginx.service_proxy(ngx, user_id, headers)
   ngx.req.set_header(cookie.COOKIE_HEADER, "")
   ngx.req.set_header(auth.ACCESS_TOKEN_HEADER, "")
 
-  ngx.req.set_header(FORWARDED_FOR_HEADER, headers[CLIENT_HEADER])
+  if headers and headers[CLIENT_HEADER] then
+    ngx.req.set_header(FORWARDED_FOR_HEADER, headers[CLIENT_HEADER])
+  end
 
   return ngx.exec("@service")
 end
