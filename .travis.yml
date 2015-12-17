@@ -10,8 +10,10 @@ addons:
     - lua-resty-http
     - openresty
     - cpanminus
+env:
+  - PERL5LIB=$HOME/perl5
 
 install:  
   - luarocks build api_gateway-0.1-0.rockspec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu --local
-  - cpanm install Test::Nginx::Socket
+  - cpanm --local-lib=$HOME/perl5 install Test::Nginx::Socket
 script: ./scripts/run-tests.sh
