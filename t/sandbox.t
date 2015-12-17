@@ -67,7 +67,6 @@ world
       proxy_pass http://$upstream/$stripped_uri;
     }
 --- more_headers
-X-Wikia-UserId: 1234
 Fastly-Client-IP: 10.10.10.10
 Host: wikia-api-gateway-backends.getsandbox.com
 --- request
