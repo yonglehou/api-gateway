@@ -1,4 +1,4 @@
-# vim:set ft= ts=4 sw=4 et:
+# vim:set ft=perl ts=4 sw=4 et:
 use warnings;
 use strict;
 use File::Basename;
@@ -8,9 +8,10 @@ use lib dirname(abs_path($0));
 use TestHelper;
 
 our $pwd = cwd();
+our $APIGatewayTestMock = $ENV{"API_GATEWAY_TEST_MOCK"} || "wikia-api-gateway-backends.getsandbox.com";
 
 create_configured_locations($pwd . '/t/lua/configured_locations.lua');
-our $HttpConfig = create_http_config($pwd);
+our $HttpConfig = create_http_config($pwd, $APIGatewayTestMock);
 
 plan tests => repeat_each(1) * (2 * blocks());
 
@@ -66,9 +67,9 @@ world
       proxy_set_header Host $host;
       proxy_pass http://$upstream/$stripped_uri;
     }
---- more_headers
-Fastly-Client-IP: 10.10.10.10
-Host: wikia-api-gateway-backends.getsandbox.com
+--- more_headers eval
+"Fastly-Client-IP: 10.10.10.10
+Host: $::APIGatewayTestMock"
 --- request
     GET /test/x-forwarded-for
 --- response_body_like

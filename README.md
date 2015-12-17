@@ -9,12 +9,21 @@ gateway.
 
 ## Testing
 
-This package is tested using [busted](http://olivinelabs.com/busted/). To run the tests do
+The lua source code is tested using [busted](http://olivinelabs.com/busted/). To run the tests do
 the following:
 
 ```
 busted spec
 ```
+
+The lua+nginx integration is tested using `Test::Nginx::Socket`. To run the
+tests, set `TEST_NGINX_BINARY` (see the Environment section below) and execute:
+
+```
+prove -r t/
+```
+
+See `t/basic.t` for the Perl dependencies and example code.
 
 ## Local Integration Testing
 
@@ -149,6 +158,9 @@ dt push -a api-gateway -e prod
 ## Environement variables
 
  * `NGINX_BIN`: Set to the location of your nginx binary.
+ * `TEST_NGINX_BINARY`: Set to the location of nginx.
+		E.g. `export TEST_NGINX_BINARY=`which openresty` on OS X.
+ * `API_GATEWAY_TEST_MOCK`: Set to change the default api-gateway test mock.
 
 ## Contributors
 

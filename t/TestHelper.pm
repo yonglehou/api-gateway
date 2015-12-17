@@ -21,11 +21,11 @@ sub create_configured_locations {
 }
 
 sub create_http_config {
-    my ($pwd) = @_;
+    my ($pwd, $backend) = @_;
     return qq{
   lua_package_path '${pwd}/t/lua/?.lua;${pwd}/src/?.lua;/usr/local/openresty/lualib/?.lua;;';
   upstream test {
-    server wikia-api-gateway-backends.getsandbox.com;
+    server ${backend};
   }
 };
 
