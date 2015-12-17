@@ -11,6 +11,7 @@ our $pwd = cwd();
 our $APIGatewayTestMock = $ENV{"API_GATEWAY_TEST_MOCK"} || "wikia-api-gateway-backends.getsandbox.com";
 
 create_configured_locations($pwd . '/t/lua/configured_locations.lua');
+create_lua_config($pwd . '/src/config.lua');
 our $HttpConfig = create_http_config($pwd, $APIGatewayTestMock);
 
 plan tests => repeat_each(1) * (2 * blocks());
