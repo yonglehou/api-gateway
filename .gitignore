@@ -4,3 +4,5 @@ nginx/production/upstreams.conf
 src/configured_locations.lua
 t/lua
 t/servroot
+tmp/
+.R*
