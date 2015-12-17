@@ -7,4 +7,9 @@ if [ $(uname) == "Darwin" ]; then
     fi
     export TEST_NGINX_BINARY=$NGINX_BIN
 fi
-busted spec && prove -r t
+
+busted spec
+prove -r t
+if [ $? -ne 0 ]; then
+    cat $PWD/t/servroot/logs/error.log
+fi
