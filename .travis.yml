@@ -25,4 +25,5 @@ install:
   - cpanm --local-lib=$HOME/perl5 install Test::Nginx::Socket
 script:
   - ./scripts/install-openresty.sh
+  - ./scripts/install-luarocks.sh
   - ./scripts/run-tests.sh

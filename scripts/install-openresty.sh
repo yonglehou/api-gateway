@@ -10,6 +10,8 @@ mkdir -p $PREFIX
 
 
 cd $TEMPDIR
+rm -rf ngx_openresty-${VERSION}
+
 wget $DOWNLOAD_BASE/$PACKAGE
 tar zxvf $PACKAGE
 

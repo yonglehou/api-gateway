@@ -12,4 +12,5 @@ busted spec
 prove -r t
 if [ $? -ne 0 ]; then
     cat $PWD/t/servroot/logs/error.log
+    exit 1
 fi
