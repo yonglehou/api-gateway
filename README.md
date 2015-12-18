@@ -9,12 +9,21 @@ gateway.
 
 ## Testing
 
-This package is tested using [busted](http://olivinelabs.com/busted/). To run the tests do
+The lua source code is tested using [busted](http://olivinelabs.com/busted/). To run the tests do
 the following:
 
 ```
 busted spec
 ```
+
+The lua+nginx integration is tested using `Test::Nginx::Socket`. To run the
+tests, set `TEST_NGINX_BINARY` (see the Environment section below) and execute:
+
+```
+prove -r t/
+```
+
+See `t/basic.t` for the Perl dependencies and example code.
 
 ## Local Integration Testing
 
@@ -131,9 +140,27 @@ dt push -a api-gateway -e prod
  * [nginx](http://nginx.org/)
  * [consul-template](https://github.com/hashicorp/consul-template)
 
+## Installing luarocks & openresty Dependencies
+
+ ```
+ export LUAJIT_PATH=/usr/local/Cellar/openresty/1.7.10.1/luajit # set to your local path
+ wget http://luarocks.org/releases/luarocks-2.0.11.tar.gz
+ tar -xzvf luarocks-2.0.11.tar.gz
+ cd luarocks-2.0.13/
+ ./configure --prefix=$LUAJIT_PATH \
+     --with-lua=$LUAJIT_PATH \
+		 --lua-suffix=jit-2.1.0-alpha \
+	   --with-lua-include=$LUAJIT_PATH/include/luajit-2.1
+ make
+ make install
+ ```
+
 ## Environement variables
 
  * `NGINX_BIN`: Set to the location of your nginx binary.
+ * `TEST_NGINX_BINARY`: Set to the location of nginx.
+		E.g. `export TEST_NGINX_BINARY=`which openresty` on OS X.
+ * `API_GATEWAY_TEST_MOCK`: Set to change the default api-gateway test mock.
 
 ## Contributors
 

@@ -7,8 +7,23 @@ addons:
     - libssl-dev
     - luajit
     - luarocks
-    - lua-resty-http
+    - cpanminus
+    - libreadline-dev
+    - libncurses5-dev
+    - libpcre3-dev
+    - libssl-dev
+    - perl
+    - make
+    - build-essential
+
+
+env:
+  - PERL5LIB=$HOME/perl5/lib/perl5 LUAJIT_PATH=$HOME/local/luajit/
 
 install:  
   - luarocks build api_gateway-0.1-0.rockspec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu --local
-script: "~/.luarocks/bin/busted spec"
+  - cpanm --local-lib=$HOME/perl5 install Test::Nginx::Socket
+script:
+  - ./scripts/install-openresty.sh
+  - ./scripts/install-luarocks.sh
+  - ./scripts/run-tests.sh

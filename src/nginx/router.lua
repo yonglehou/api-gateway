@@ -10,7 +10,7 @@ function router.route()
 
   local headers = ngx.req.get_headers(100)
   local user_id = nginx.authenticate(app, headers)
-  return nginx.service_proxy(ngx, user_id)
+  return nginx.service_proxy(ngx, user_id, headers)
 end
 
 
