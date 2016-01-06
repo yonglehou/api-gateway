@@ -137,7 +137,7 @@ dt push -a api-gateway -e prod
  * [busted](http://olivinelabs.com/busted/)
  * [lua-httpclient](https://github.com/lusis/lua-httpclient) Can be installed with `luarocks`
  * [lua-cjson](https://github.com/mpx/lua-cjson)
- * [nginx](http://nginx.org/)
+ * [nginx](http://nginx.org/) or [openresty](http://openresty.org)
  * [consul-template](https://github.com/hashicorp/consul-template)
 
 ## Installing luarocks & openresty Dependencies
@@ -154,6 +154,18 @@ dt push -a api-gateway -e prod
  make
  make install
  ```
+
+ See `scripts/install-luarocks.sh` for the script used to install the
+ dependencies for travis.
+
+ If you are working on OS X consider using [openresty](http://openresty.org) for
+ nginx. It comes configured to work with the api-gateway.
+
+ If you need to add additional nginx modules to openresty you might find it
+ helpful to install openresty with homebrew. If you go this route you can add
+ nginx modules to the configuration with `brew edit openresty`. Then under the
+ `install` block you can add additional modules by adding a line to the `args`
+ array e.g.`"--with-http_realip_module"`.
 
 ## Environement variables
 
