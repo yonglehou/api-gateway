@@ -1,13 +1,9 @@
 -- package nginx: An nginx auth handler
 
 local SERVICE_PROXY_PATH = "/sub/service"
-local CLIENT_HEADER = "Fastly-Client-IP"
-local FORWARDED_FOR_HEADER = "X-Forwarded-For"
 
 local nginx = {
   SERVICE_PROXY_PATH = SERVICE_PROXY_PATH,
-  CLIENT_HEADER = CLIENT_HEADER,
-  FORWARDED_FOR_HEADER = FORWARDED_FOR_HEADER,
 }
 
 local auth = require "auth"
@@ -57,7 +53,7 @@ function nginx.authenticate(app, headers)
   return nil
 end
 
-function nginx.service_proxy(ngx, user_id, headers)
+function nginx.service_proxy(ngx, user_id)
   -- the X-Wikia-UserId header should either be set by a valid
   -- user id or cleared
   if user_id then
@@ -69,10 +65,6 @@ function nginx.service_proxy(ngx, user_id, headers)
   -- clear the cookie; it should not be sent to the backend
   ngx.req.set_header(cookie.COOKIE_HEADER, "")
   ngx.req.set_header(auth.ACCESS_TOKEN_HEADER, "")
-
-  if headers and headers[CLIENT_HEADER] then
-    ngx.req.set_header(FORWARDED_FOR_HEADER, headers[CLIENT_HEADER])
-  end
 
   return ngx.exec("@service")
 end
